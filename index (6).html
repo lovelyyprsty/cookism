@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CookieHouse - Sistem Akuntansi</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+:root{
+    --brown-dark:#4a2c20;
+    --brown:#795548;
+    --brown-light:#a9826d;
+    --cream:#f8f1e7;
+    --white:#fff;
+    --text:#38251d;
+    --muted:#8c7b70;
+    --border:#eadfd4;
+    --green:#758b63;
+    --red:#b76e5c;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'DM Sans',sans-serif;
+    background:#faf7f2;
+    color:var(--text);
+}
+
+button,input,select{
+    font-family:inherit;
+}
+
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width:255px;
+    background:var(--brown-dark);
+    color:white;
+    padding:28px 18px;
+    position:fixed;
+    height:100vh;
+    left:0;
+    top:0;
+    display:flex;
+    flex-direction:column;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:0 10px 35px;
+}
+
+.logo-icon{
+    width:43px;
+    height:43px;
+    background:var(--cream);
+    border-radius:13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:23px;
+}
+
+.logo h2{
+    font-family:'Playfair Display',serif;
+    font-size:18px;
+}
+
+.logo span{
+    font-size:10px;
+    color:#d7c1af;
+}
+
+nav{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.nav-link{
+    color:#d9c8bc;
+    text-decoration:none;
+    padding:13px 14px;
+    border-radius:11px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    font-size:14px;
+    cursor:pointer;
+}
+
+.nav-link:hover{
+    background:rgba(255,255,255,.08);
+    color:white;
+}
+
+.nav-link.active{
+    background:var(--cream);
+    color:var(--brown-dark);
+    font-weight:600;
+}
+
+.nav-link span{
+    width:22px;
+    text-align:center;
+    font-size:18px;
+}
+
+.sidebar-bottom{
+    margin-top:auto;
+}
+
+.store-card{
+    background:rgba(255,255,255,.08);
+    border-radius:14px;
+    padding:13px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.store-icon{
+    background:var(--cream);
+    width:36px;
+    height:36px;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.store-card strong{
+    display:block;
+    font-size:12px;
+}
+
+.store-card small{
+    color:#c8b6a9;
+    font-size:9px;
+}
+
+/* MAIN */
+.main{
+    margin-left:255px;
+    width:calc(100% - 255px);
+    padding:28px 38px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:27px;
+}
+
+.welcome{
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:3px;
+}
+
+.topbar h1{
+    font-family:'Playfair Display',serif;
+    font-size:29px;
+}
+
+.date-box{
+    background:white;
+    border:1px solid var(--border);
+    padding:10px 15px;
+    border-radius:10px;
+    color:var(--brown);
+    font-size:12px;
+}
+
+/* PAGE */
+.page{
+    display:none;
+}
+
+.active-page{
+    display:block;
+}
+
+/* HERO */
+.hero{
+    background:var(--cream);
+    border-radius:20px;
+    padding:30px 35px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:22px;
+}
+
+.hero-label{
+    color:var(--brown);
+    font-size:10px;
+    letter-spacing:2px;
+    font-weight:700;
+}
+
+.hero h2{
+    font-family:'Playfair Display',serif;
+    font-size:28px;
+    line-height:1.25;
+    margin-top:5px;
+}
+
+.hero-desc{
+    margin-top:10px;
+    color:var(--muted);
+    font-size:12px;
+}
+
+.hero-cookie{
+    font-size:85px;
+    transform:rotate(-12deg);
+    margin-right:45px;
+}
+
+/* STATS */
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:22px;
+}
+
+.stat-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:18px;
+    display:flex;
+    align-items:center;
+    gap:13px;
+}
+
+.stat-icon{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    font-weight:700;
+}
+
+.income{
+    background:#e8efe3;
+    color:var(--green);
+}
+
+.expense{
+    background:#f5e4df;
+    color:var(--red);
+}
+
+.profit{
+    background:#eee4da;
+    color:var(--brown);
+}
+
+.stock{
+    background:var(--cream);
+    color:var(--brown);
+}
+
+.stat-card p{
+    font-size:11px;
+    color:var(--muted);
+    margin-bottom:4px;
+}
+
+.stat-card h3{
+    font-size:17px;
+}
+
+/* GRID */
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:1.6fr 1fr;
+    gap:20px;
+}
+
+.content-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:20px;
+}
+
+.card-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:18px;
+}
+
+.card-header h3{
+    font-size:16px;
+}
+
+.card-header p{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:3px;
+}
+
+.text-button{
+    border:none;
+    background:none;
+    color:var(--brown);
+    font-size:11px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+/* TRANSACTION */
+.transaction-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 0;
+    border-bottom:1px solid #f0e9e2;
+}
+
+.transaction-left{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.transaction-icon{
+    width:35px;
+    height:35px;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.transaction-name{
+    font-size:12px;
+    font-weight:600;
+}
+
+.transaction-date{
+    font-size:9px;
+    color:var(--muted);
+    margin-top:2px;
+}
+
+.transaction-value{
+    font-size:12px;
+    font-weight:700;
+}
+
+/* STOCK */
+.stock-preview{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 0;
+    border-bottom:1px solid #f0e9e2;
+}
+
+.stock-name{
+    font-size:12px;
+    font-weight:600;
+}
+
+.stock-price{
+    font-size:9px;
+    color:var(--muted);
+    margin-top:2px;
+}
+
+.stock-badge{
+    background:var(--cream);
+    color:var(--brown);
+    border-radius:8px;
+    padding:5px 9px;
+    font-size:10px;
+    font-weight:600;
+}
+
+/* SECTION */
+.section-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.section-header h2{
+    font-family:'Playfair Display',serif;
+    font-size:25px;
+}
+
+.section-header p{
+    color:var(--muted);
+    font-size:12px;
+    margin-top:4px;
+}
+
+.primary-button{
+    border:none;
+    background:var(--brown-dark);
+    color:white;
+    padding:11px 17px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:600;
+}
+
+/* TABLE */
+.table-container{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    text-align:left;
+    font-size:10px;
+    color:var(--muted);
+    padding:12px;
+    background:#faf7f2;
+}
+
+td{
+    padding:14px 12px;
+    border-bottom:1px solid #f0e9e2;
+    font-size:12px;
+}
+
+.type-income{
+    color:var(--green);
+    font-weight:600;
+}
+
+.type-expense{
+    color:var(--red);
+    font-weight:600;
+}
+
+/* PRODUCTS */
+.product-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:17px;
+}
+
+.product-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:17px;
+    padding:20px;
+}
+
+.product-image{
+    height:110px;
+    border-radius:13px;
+    background:var(--cream);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:55px;
+    margin-bottom:15px;
+}
+
+.product-card h3{
+    font-family:'Playfair Display',serif;
+    font-size:17px;
+}
+
+.product-card p{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:4px;
+}
+
+.product-info{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:14px;
+}
+
+.product-price{
+    font-weight:700;
+    font-size:13px;
+}
+
+.product-stock{
+    background:var(--cream);
+    color:var(--brown);
+    border-radius:8px;
+    padding:6px 9px;
+    font-size:10px;
+}
+
+/* FILTER */
+.filter-row{
+    margin-bottom:15px;
+}
+
+.filter-row input{
+    width:300px;
+    border:1px solid var(--border);
+    padding:11px 13px;
+    border-radius:9px;
+    outline:none;
+}
+
+/* MODAL */
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(48,30,22,.5);
+    z-index:100;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    background:white;
+    width:100%;
+    max-width:470px;
+    border-radius:18px;
+    padding:25px;
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:22px;
+}
+
+.modal-header h2{
+    font-family:'Playfair Display',serif;
+    font-size:22px;
+}
+
+.modal-header p{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:3px;
+}
+
+.close-button{
+    border:none;
+    background:var(--cream);
+    color:var(--brown);
+    width:30px;
+    height:30px;
+    border-radius:8px;
+    font-size:20px;
+    cursor:pointer;
+}
+
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group label{
+    display:block;
+    font-size:11px;
+    font-weight:600;
+    margin-bottom:6px;
+}
+
+.form-group input,
+.form-group select{
+    width:100%;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:11px;
+    outline:none;
+    font-size:12px;
+    background:white;
+}
+
+.form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:13px;
+}
+
+.submit-button{
+    width:100%;
+    border:none;
+    background:var(--brown-dark);
+    color:white;
+    padding:12px;
+    border-radius:9px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.empty{
+    text-align:center;
+    padding:30px;
+    color:var(--muted);
+    font-size:12px;
+}
+
+/* RESPONSIVE */
+@media(max-width:1000px){
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .dashboard-grid{
+        grid-template-columns:1fr;
+    }
+
+    .product-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:700px){
+    .sidebar{
+        width:70px;
+        padding:20px 10px;
+    }
+
+    .logo div:not(.logo-icon),
+    .sidebar-bottom{
+        display:none;
+    }
+
+    .nav-link{
+        justify-content:center;
+        padding:13px 5px;
+        font-size:0;
+    }
+
+    .main{
+        margin-left:70px;
+        width:calc(100% - 70px);
+        padding:20px;
+    }
+
+    .hero{
+        padding:22px;
+    }
+
+    .hero h2{
+        font-size:22px;
+    }
+
+    .hero-cookie{
+        font-size:55px;
+        margin-right:5px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .product-grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+    <div class="logo">
+        <div class="logo-icon">🍪</div>
+        <div>
+            <h2>CookieHouse</h2>
+            <span>Accounting System</span>
+        </div>
+    </div>
+
+    <nav>
+
+        <a class="nav-link active"
+           onclick="showPage('dashboard',this)">
+            <span>⌂</span> Dashboard
+        </a>
+
+        <a class="nav-link"
+           onclick="showPage('pemasukan',this)">
+            <span>＋</span> Pemasukan
+        </a>
+
+        <a class="nav-link"
+           onclick="showPage('pengeluaran',this)">
+            <span>−</span> Pengeluaran
+        </a>
+
+        <a class="nav-link"
+           onclick="showPage('persediaan',this)">
+            <span>▣</span> Persediaan
+        </a>
+
+        <a class="nav-link"
+           onclick="showPage('transaksi',this)">
+            <span>☷</span> Transaksi
+        </a>
+
+    </nav>
+
+    <div class="sidebar-bottom">
+
+        <div class="store-card">
+            <span class="store-icon">🍪</span>
+
+            <div>
+                <strong>CookieHouse</strong>
+                <small>Sweet & Fresh Cookies</small>
+            </div>
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- MAIN -->
+<main class="main">
+
+<header class="topbar">
+
+    <div>
+        <p class="welcome">Selamat datang 👋</p>
+        <h1 id="pageTitle">Dashboard</h1>
+    </div>
+
+    <div class="date-box">
+        📅 <span id="currentDate"></span>
+    </div>
+
+</header>
+
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="page active-page">
+
+    <div class="hero">
+
+        <div>
+            <p class="hero-label">COOKIEHOUSE</p>
+
+            <h2>
+                Kelola keuangan toko<br>
+                dengan lebih mudah.
+            </h2>
+
+            <p class="hero-desc">
+                Catat pemasukan, pengeluaran, dan persediaan cookies
+                dalam satu sistem.
+            </p>
+        </div>
+
+        <div class="hero-cookie">🍪</div>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat-card">
+            <div class="stat-icon income">↗</div>
+            <div>
+                <p>Total Pemasukan</p>
+                <h3 id="totalIncome">Rp 0</h3>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon expense">↘</div>
+            <div>
+                <p>Total Pengeluaran</p>
+                <h3 id="totalExpense">Rp 0</h3>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon profit">₍₎</div>
+            <div>
+                <p>Laba Bersih</p>
+                <h3 id="totalProfit">Rp 0</h3>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon stock">▣</div>
+            <div>
+                <p>Total Persediaan</p>
+                <h3 id="totalStock">0 pcs</h3>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-grid">
+
+        <div class="content-card">
+
+            <div class="card-header">
+
+                <div>
+                    <h3>Transaksi Terbaru</h3>
+                    <p>Aktivitas keuangan toko</p>
+                </div>
+
+                <button class="text-button"
+                        onclick="showPage('transaksi')">
+                    Lihat semua →
+                </button>
+
+            </div>
+
+            <div id="recentTransactions"></div>
+
+        </div>
+
+
+        <div class="content-card">
+
+            <div class="card-header">
+
+                <div>
+                    <h3>Stok Cookies</h3>
+                    <p>Persediaan saat ini</p>
+                </div>
+
+            </div>
+
+            <div id="stockPreview"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PEMASUKAN -->
+<section id="pemasukan" class="page">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Data Pemasukan</h2>
+            <p>Catat penjualan cookies yang masuk.</p>
+        </div>
+
+        <button class="primary-button"
+                onclick="openModal('income')">
+            + Tambah Pemasukan
+        </button>
+
+    </div>
+
+    <div class="content-card">
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Produk</th>
+                        <th>Jumlah</th>
+                        <th>Harga</th>
+                        <th>Total</th>
+                        <th>Metode</th>
+                    </tr>
+                </thead>
+
+                <tbody id="incomeTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PENGELUARAN -->
+<section id="pengeluaran" class="page">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Data Pengeluaran</h2>
+            <p>Catat biaya yang dikeluarkan toko.</p>
+        </div>
+
+        <button class="primary-button"
+                onclick="openModal('expense')">
+            + Tambah Pengeluaran
+        </button>
+
+    </div>
+
+    <div class="content-card">
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Keterangan</th>
+                        <th>Kategori</th>
+                        <th>Nominal</th>
+                        <th>Metode</th>
+                    </tr>
+                </thead>
+
+                <tbody id="expenseTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- PERSEDIAAN -->
+<section id="persediaan" class="page">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Persediaan Cookies</h2>
+            <p>Pantau stok produk cookies.</p>
+        </div>
+
+        <button class="primary-button"
+                onclick="openStockModal()">
+            + Tambah Produk
+        </button>
+
+    </div>
+
+    <div id="stockGrid" class="product-grid"></div>
+
+</section>
+
+
+<!-- TRANSAKSI -->
+<section id="transaksi" class="page">
+
+    <div class="section-header">
+
+        <div>
+            <h2>Riwayat Transaksi</h2>
+            <p>Seluruh transaksi CookieHouse.</p>
+        </div>
+
+    </div>
+
+    <div class="content-card">
+
+        <div class="filter-row">
+
+            <input
+                type="text"
+                id="searchTransaction"
+                placeholder="🔍 Cari transaksi..."
+                onkeyup="renderTransactions()"
+            >
+
+        </div>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Jenis</th>
+                        <th>Keterangan</th>
+                        <th>Nominal</th>
+                    </tr>
+                </thead>
+
+                <tbody id="transactionTable"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- MODAL TRANSAKSI -->
+<div id="transactionModal" class="modal">
+
+<div class="modal-box">
+
+    <div class="modal-header">
+
+        <div>
+            <h2 id="modalTitle">Tambah Pemasukan</h2>
+            <p>Masukkan data transaksi.</p>
+        </div>
+
+        <button class="close-button"
+                onclick="closeModal()">×</button>
+
+    </div>
+
+    <form id="transactionForm">
+
+        <input type="hidden" id="transactionType">
+
+        <div class="form-group">
+
+            <label>Tanggal</label>
+
+            <input
+                type="date"
+                id="transactionDate"
+                required
+            >
+
+        </div>
+
+        <div class="form-group">
+
+            <label id="descriptionLabel">Produk</label>
+
+            <input
+                type="text"
+                id="description"
+                placeholder="Contoh: Chocolate Chip Cookies"
+                autocomplete="off"
+                required
+            >
+
+            <datalist id="productList"></datalist>
+
+        </div>
+
+        <div class="form-row">
+
+            <div class="form-group">
+
+                <label>Jumlah</label>
+
+                <input
+                    type="number"
+                    id="quantity"
+                    min="1"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label id="priceLabel">
+                    Harga Satuan
+                </label>
+
+                <input
+                    type="number"
+                    id="amount"
+                    min="0"
+                    required
+                >
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Metode Pembayaran</label>
+
+            <select id="paymentMethod">
+
+                <option>Cash</option>
+                <option>QRIS</option>
+                <option>Transfer</option>
+                <option>Debit</option>
+
+            </select>
+
+        </div>
+
+        <button class="submit-button">
+            Simpan Transaksi
+        </button>
+
+    </form>
+
+</div>
+
+</div>
+
+
+<!-- MODAL PRODUK -->
+<div id="stockModal" class="modal">
+
+<div class="modal-box">
+
+    <div class="modal-header">
+
+        <div>
+            <h2>Tambah Produk</h2>
+            <p>Tambahkan produk ke persediaan.</p>
+        </div>
+
+        <button class="close-button"
+                onclick="closeStockModal()">×</button>
+
+    </div>
+
+    <form id="stockForm">
+
+        <div class="form-group">
+
+            <label>Nama Produk</label>
+
+            <input
+                type="text"
+                id="stockName"
+                placeholder="Contoh: Red Velvet Cookies"
+                required
+            >
+
+        </div>
+
+        <div class="form-row">
+
+            <div class="form-group">
+
+                <label>Jumlah Stok</label>
+
+                <input
+                    type="number"
+                    id="stockQuantity"
+                    min="0"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Harga Jual</label>
+
+                <input
+                    type="number"
+                    id="stockPrice"
+                    min="0"
+                    required
+                >
+
+            </div>
+
+        </div>
+
+        <button class="submit-button">
+            Simpan Produk
+        </button>
+
+    </form>
+
+</div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+
+/* SUPABASE */
+
+const SUPABASE_URL = "https://bxkksyumysustlqyagqd.supabase.co";
+const SUPABASE_KEY = "sb_publishable_9NQjWmbM341U4DkC0LIy7Q_GDWoyyUy";
+
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let transactions = [];
+let products = [];
+
+function esc(text){
+    return String(text ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#39;");
+}
+
+async function loadData(){
+
+    const [p,t]=await Promise.all([
+
+        db.from("products")
+        .select("*")
+        .order("id",{ascending:true}),
+
+        db.from("transactions")
+        .select("*")
+        .order("transaction_date",{ascending:false})
+        .order("id",{ascending:false})
+
+    ]);
+
+    if(p.error || t.error){
+        const err=p.error || t.error;
+        console.error(err);
+        alert("Gagal memuat data dari Supabase: "+err.message);
+        return;
+    }
+
+    products=p.data.map(r=>({
+        id:r.id,
+        name:r.name,
+        stock:Number(r.stock),
+        price:Number(r.price),
+        emoji:r.emoji
+    }));
+
+    transactions=t.data.map(r=>({
+        id:r.id,
+        type:r.type,
+        date:r.transaction_date,
+        description:r.description,
+        product_id:r.product_id,
+        quantity:Number(r.quantity),
+        amount:Number(r.amount),
+        payment:r.payment_method
+    }));
+
+    renderAll();
+}
+
+function findProduct(text){
+
+    const q=(text||"").trim().toLowerCase();
+
+    if(!q) return null;
+
+    return products.find(p=>p.name.toLowerCase()===q)
+        || products.find(p=>q.includes(p.name.toLowerCase()))
+        || null;
+}
+
+
+/* FORMAT RUPIAH */
+
+function formatRupiah(number){
+    return new Intl.NumberFormat("id-ID",{
+        style:"currency",
+        currency:"IDR",
+        maximumFractionDigits:0
+    }).format(number);
+}
+
+
+/* DATE */
+
+function formatDate(date){
+    return new Date(date).toLocaleDateString(
+        "id-ID",
+        {
+            day:"2-digit",
+            month:"short",
+            year:"numeric"
+        }
+    );
+}
+
+
+/* NAVIGATION */
+
+function showPage(pageId,element){
+
+    document.querySelectorAll(".page")
+    .forEach(page =>
+        page.classList.remove("active-page")
+    );
+
+    document.getElementById(pageId)
+    .classList.add("active-page");
+
+    document.querySelectorAll(".nav-link")
+    .forEach(link =>
+        link.classList.remove("active")
+    );
+
+    if(element)
+        element.classList.add("active");
+
+    const titles={
+        dashboard:"Dashboard",
+        pemasukan:"Pemasukan",
+        pengeluaran:"Pengeluaran",
+        persediaan:"Persediaan",
+        transaksi:"Riwayat Transaksi"
+    };
+
+    document.getElementById("pageTitle")
+    .textContent=titles[pageId];
+
+    renderAll();
+}
+
+
+/* CALCULATION */
+
+function calculateIncome(){
+
+    return transactions
+    .filter(t=>t.type==="income")
+    .reduce(
+        (total,t)=>total+(t.quantity*t.amount),
+        0
+    );
+}
+
+function calculateExpense(){
+
+    return transactions
+    .filter(t=>t.type==="expense")
+    .reduce(
+        (total,t)=>total+t.amount,
+        0
+    );
+}
+
+function calculateStock(){
+
+    return products.reduce(
+        (total,p)=>total+Number(p.stock),
+        0
+    );
+}
+
+
+/* DASHBOARD */
+
+function renderDashboard(){
+
+    const income=calculateIncome();
+    const expense=calculateExpense();
+
+    document.getElementById("totalIncome")
+    .textContent=formatRupiah(income);
+
+    document.getElementById("totalExpense")
+    .textContent=formatRupiah(expense);
+
+    document.getElementById("totalProfit")
+    .textContent=formatRupiah(income-expense);
+
+    document.getElementById("totalStock")
+    .textContent=calculateStock()+" pcs";
+
+
+    const recent=
+        transactions.slice(0,5);
+
+    document.getElementById("recentTransactions")
+    .innerHTML=recent.length
+    ? recent.map(t=>{
+
+        const total=
+            t.type==="income"
+            ? t.quantity*t.amount
+            : t.amount;
+
+        return `
+        <div class="transaction-item">
+
+            <div class="transaction-left">
+
+                <div class="transaction-icon
+                    ${t.type==="income"?"income":"expense"}">
+
+                    ${t.type==="income"?"↗":"↘"}
+
+                </div>
+
+                <div>
+
+                    <div class="transaction-name">
+                        ${esc(t.description)}
+                    </div>
+
+                    <div class="transaction-date">
+                        ${formatDate(t.date)}
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="transaction-value
+                ${t.type==="income"?"type-income":"type-expense"}">
+
+                ${t.type==="income"?"+":"-"}
+                ${formatRupiah(total)}
+
+            </div>
+
+        </div>
+        `;
+
+    }).join("")
+    : `<div class="empty">Belum ada transaksi.</div>`;
+
+
+    document.getElementById("stockPreview")
+    .innerHTML=products.slice(0,5).map(p=>`
+
+        <div class="stock-preview">
+
+            <div>
+
+                <div class="stock-name">
+                    ${esc(p.name)}
+                </div>
+
+                <div class="stock-price">
+                    ${formatRupiah(p.price)}
+                </div>
+
+            </div>
+
+            <span class="stock-badge">
+                ${p.stock} pcs
+            </span>
+
+        </div>
+
+    `).join("");
+}
+
+
+/* PEMASUKAN */
+
+function renderIncome(){
+
+    const data=
+        transactions.filter(t=>t.type==="income");
+
+    document.getElementById("incomeTable")
+    .innerHTML=data.length
+    ? data.map(t=>`
+
+        <tr>
+
+            <td>${formatDate(t.date)}</td>
+
+            <td>${esc(t.description)}</td>
+
+            <td>${t.quantity} pcs</td>
+
+            <td>${formatRupiah(t.amount)}</td>
+
+            <td class="type-income">
+                ${formatRupiah(t.quantity*t.amount)}
+            </td>
+
+            <td>${esc(t.payment)}</td>
+
+        </tr>
+
+    `).join("")
+    : `<tr>
+        <td colspan="6" class="empty">
+            Belum ada pemasukan.
+        </td>
+       </tr>`;
+}
+
+
+/* PENGELUARAN */
+
+function renderExpense(){
+
+    const data=
+        transactions.filter(t=>t.type==="expense");
+
+    document.getElementById("expenseTable")
+    .innerHTML=data.length
+    ? data.map(t=>`
+
+        <tr>
+
+            <td>${formatDate(t.date)}</td>
+
+            <td>${esc(t.description)}</td>
+
+            <td>Beban Toko</td>
+
+            <td class="type-expense">
+                ${formatRupiah(t.amount)}
+            </td>
+
+            <td>${esc(t.payment)}</td>
+
+        </tr>
+
+    `).join("")
+    : `<tr>
+        <td colspan="5" class="empty">
+            Belum ada pengeluaran.
+        </td>
+       </tr>`;
+}
+
+
+/* TRANSAKSI */
+
+function renderTransactions(){
+
+    const search=
+        document.getElementById("searchTransaction")
+        ?.value.toLowerCase() || "";
+
+    const data=
+        transactions.filter(t=>
+            t.description
+            .toLowerCase()
+            .includes(search)
+        );
+
+    document.getElementById("transactionTable")
+    .innerHTML=data.map(t=>{
+
+        const total=
+            t.type==="income"
+            ? t.quantity*t.amount
+            : t.amount;
+
+        return `
+        <tr>
+
+            <td>${formatDate(t.date)}</td>
+
+            <td class="${
+                t.type==="income"
+                ?"type-income"
+                :"type-expense"
+            }">
+
+                ${t.type==="income"
+                ?"Pemasukan"
+                :"Pengeluaran"}
+
+            </td>
+
+            <td>${esc(t.description)}</td>
+
+            <td class="${
+                t.type==="income"
+                ?"type-income"
+                :"type-expense"
+            }">
+
+                ${t.type==="income"?"+":"-"}
+                ${formatRupiah(total)}
+
+            </td>
+
+        </tr>
+        `;
+
+    }).join("");
+}
+
+
+/* PRODUCTS */
+
+function renderProducts(){
+
+    document.getElementById("productList")
+    .innerHTML=products.map(p=>
+        `<option value="${esc(p.name)}">`
+    ).join("");
+
+    document.getElementById("stockGrid")
+    .innerHTML=products.map(p=>`
+
+        <div class="product-card">
+
+            <div class="product-image">
+                ${esc(p.emoji)}
+            </div>
+
+            <h3>${esc(p.name)}</h3>
+
+            <p>Cookies homemade</p>
+
+            <div class="product-info">
+
+                <span class="product-price">
+                    ${formatRupiah(p.price)}
+                </span>
+
+                <span class="product-stock">
+                    Stok ${p.stock}
+                </span>
+
+            </div>
+
+        </div>
+
+    `).join("");
+}
+
+
+/* MODAL TRANSACTION */
+
+function openModal(type){
+
+    document.getElementById("transactionModal")
+    .classList.add("show");
+
+    document.getElementById("transactionType")
+    .value=type;
+
+    const descInput=document.getElementById("description");
+
+    if(type==="income"){
+        descInput.setAttribute("list","productList");
+    }else{
+        descInput.removeAttribute("list");
+    }
+
+    if(type==="income"){
+
+        document.getElementById("modalTitle")
+        .textContent="Tambah Pemasukan";
+
+        document.getElementById("descriptionLabel")
+        .textContent="Produk";
+
+        document.getElementById("priceLabel")
+        .textContent="Harga Satuan";
+
+    }else{
+
+        document.getElementById("modalTitle")
+        .textContent="Tambah Pengeluaran";
+
+        document.getElementById("descriptionLabel")
+        .textContent="Keterangan";
+
+        document.getElementById("priceLabel")
+        .textContent="Nominal";
+
+    }
+}
+
+function closeModal(){
+
+    document.getElementById("transactionModal")
+    .classList.remove("show");
+
+    document.getElementById("transactionForm")
+    .reset();
+
+}
+
+
+/* SAVE TRANSACTION */
+
+document.getElementById("description")
+.addEventListener("input",function(){
+
+    if(document.getElementById("transactionType").value!=="income")
+        return;
+
+    const product=findProduct(this.value);
+    const amount=document.getElementById("amount");
+
+    if(product && !amount.value)
+        amount.value=product.price;
+});
+
+document.getElementById("transactionForm")
+.addEventListener("submit",async function(e){
+
+    e.preventDefault();
+
+    const type=
+        document.getElementById("transactionType").value;
+
+    const description=
+        document.getElementById("description").value.trim();
+
+    const product=
+        type==="income" ? findProduct(description) : null;
+
+    const button=this.querySelector(".submit-button");
+    button.disabled=true;
+
+    const {error}=await db.from("transactions").insert({
+
+        type:type,
+
+        transaction_date:
+            document.getElementById("transactionDate").value,
+
+        description:description,
+
+        product_id:product ? product.id : null,
+
+        quantity:
+            Number(document.getElementById("quantity").value),
+
+        amount:
+            Number(document.getElementById("amount").value),
+
+        payment_method:
+            document.getElementById("paymentMethod").value
+    });
+
+    button.disabled=false;
+
+    if(error){
+        console.error(error);
+        alert(
+            error.code==="23514"
+            ? "Stok tidak cukup untuk penjualan ini."
+            : "Gagal menyimpan transaksi: "+error.message
+        );
+        return;
+    }
+
+    closeModal();
+
+    await loadData();
+
+    alert("Transaksi berhasil disimpan!");
+
+});
+
+
+/* STOCK MODAL */
+
+function openStockModal(){
+
+    document.getElementById("stockModal")
+    .classList.add("show");
+}
+
+function closeStockModal(){
+
+    document.getElementById("stockModal")
+    .classList.remove("show");
+
+    document.getElementById("stockForm")
+    .reset();
+}
+
+
+/* SAVE PRODUCT */
+
+document.getElementById("stockForm")
+.addEventListener("submit",async function(e){
+
+    e.preventDefault();
+
+    const button=this.querySelector(".submit-button");
+    button.disabled=true;
+
+    const {error}=await db.from("products").insert({
+
+        name:
+            document.getElementById("stockName").value.trim(),
+
+        stock:
+            Number(
+                document.getElementById("stockQuantity").value
+            ),
+
+        price:
+            Number(
+                document.getElementById("stockPrice").value
+            ),
+
+        emoji:"🍪"
+    });
+
+    button.disabled=false;
+
+    if(error){
+        console.error(error);
+        alert(
+            error.code==="23505"
+            ? "Produk dengan nama tersebut sudah ada."
+            : "Gagal menyimpan produk: "+error.message
+        );
+        return;
+    }
+
+    closeStockModal();
+
+    await loadData();
+
+    alert("Produk berhasil ditambahkan!");
+
+});
+
+
+/* RENDER ALL */
+
+function renderAll(){
+
+    renderDashboard();
+    renderIncome();
+    renderExpense();
+    renderProducts();
+    renderTransactions();
+
+}
+
+
+/* INITIAL */
+
+document.getElementById("currentDate")
+.textContent=new Date().toLocaleDateString(
+    "id-ID",
+    {
+        weekday:"long",
+        day:"numeric",
+        month:"long",
+        year:"numeric"
+    }
+);
+
+document.getElementById("transactionDate")
+.value=new Date().toISOString().split("T")[0];
+
+loadData();
+
+</script>
+
+</body>
+</html>
